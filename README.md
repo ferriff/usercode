@@ -35,3 +35,16 @@ Dumper list:
 Todo:
    * generalize the dumpers, e.g. by deriving them from a common class with common
      options and specifying only the dumper function for each of the classes
+
+```
+scram project CMSSW_7_4_6
+cd CMSSW_7_4_6//src/
+cmsenv
+git cms-merge-topic shervin86:iRingInSubdet
+git clone git@github.com:ferriff/usercode.git
+git remote add -m ecal_calib_tools ferriff git@github.com:ferriff/cmssw.git
+git fetch ferriff
+git checkout newBranch
+git rebase --onto newBranch ebba82923bf40355e8763a0571cdd773e36ba458 ferriff/ecal_calib_tools
+scram b -j16
+```
