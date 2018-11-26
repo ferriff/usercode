@@ -20,8 +20,13 @@
 #include "CondFormats/EcalObjects/interface/EcalPulseShapes.h"
 #include "CondFormats/EcalObjects/interface/EcalTimeOffsetConstant.h"
 #include "CondFormats/EcalObjects/interface/EcalTPGLinearizationConst.h"
-#include "CondFormats/EcalObjects/interface/EcalTPGGroups.h"
+#include "CondFormats/EcalObjects/interface/EcalTPGLutGroup.h"
 #include "CondFormats/EcalObjects/interface/EcalTPGLutIdMap.h"
+#include "CondFormats/EcalObjects/interface/EcalTPGPedestals.h"
+#include "CondFormats/EcalObjects/interface/EcalTPGWeightIdMap.h"
+#include "CondFormats/EcalObjects/interface/EcalTPGWeightGroup.h"
+#include "CondFormats/EcalObjects/interface/EcalTPGSlidingWindow.h"
+#include "CondFormats/EcalObjects/interface/EcalTPGSpike.h"
 #include "CondFormats/ESObjects/interface/ESEEIntercalibConstants.h"
 #include "CondFormats/ESObjects/interface/ESGain.h"
 #include "CondFormats/ESObjects/interface/ESIntercalibConstants.h"
@@ -261,7 +266,7 @@ namespace cond {
                                 }
                         }
 
-                        void dump(FILE * fd, EcalTPGGroups & o)
+                        void dump(FILE * fd, EcalTPGLutGroup & o)
                         {
                                 for (const auto & it : o.getMap()) {
                                         fprintf(fd, "%d %d\n", it.first, it.second);
@@ -277,6 +282,56 @@ namespace cond {
                                                 fprintf(fd, " %d", lut[i]);
                                         }
                                         fprintf(fd, "\n");
+                                }
+                        }
+
+                        void dump(FILE * fd, EcalTPGPedestals & o)
+                        {
+                                for (size_t i = 0; i < _ids.size(); ++i) {
+                                        DetId id(_ids[i]);
+                                        EcalTPGPedestals::const_iterator it = o.find(id);
+                                        if (it == o.end()) {
+                                                fprintf(stderr, "Cannot find value for DetId %u", id.rawId());
+                                        }
+                                        coord(_ids[i]);
+                                        fprintf(fd, "%d %d %d  %d  %d  %d  %u\n", _c.ix_, _c.iy_, _c.iz_,
+                                                (*it).mean_x12,
+                                                (*it).mean_x6,
+                                                (*it).mean_x1,
+                                                id.rawId());
+                                }
+                        }
+
+                        void dump(FILE * fd, EcalTPGWeightGroup & o)
+                        {
+                                for (const auto & it : o.getMap()) {
+                                        fprintf(fd, "%d %d\n", it.first, it.second);
+                                }
+                        }
+
+                        void dump(FILE * fd, EcalTPGWeightIdMap & o)
+                        {
+                                for (const auto & it : o.getMap()) {
+                                        fprintf(fd, "%d  ", it.first);
+                                        uint32_t w0, w1, w2, w3, w4;
+                                        it.second.getValues(w0, w1, w2, w3, w4);
+                                        fprintf(fd, " %d %d %d %d %d\n", w0, w1, w2, w3, w4);
+                                }
+                        }
+
+                        void dump(FILE * fd, EcalTPGSlidingWindow & o)
+                        {
+                                fprintf(fd, "#id value\n");
+                                for (const auto & it : o.getMap()) {
+                                        fprintf(fd, "%d %d\n", it.first, it.second);
+                                }
+                        }
+
+                        void dump(FILE * fd, EcalTPGSpike & o)
+                        {
+                                fprintf(fd, "#stripId lut\n");
+                                for (const auto & it : o.getMap()) {
+                                        fprintf(fd, "%d %d\n", it.first, it.second);
                                 }
                         }
 

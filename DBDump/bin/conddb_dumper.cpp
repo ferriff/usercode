@@ -12,8 +12,13 @@
 #include "CondFormats/EcalObjects/interface/EcalPulseShapes.h"
 #include "CondFormats/EcalObjects/interface/EcalTimeCalibConstants.h"
 #include "CondFormats/EcalObjects/interface/EcalTPGLinearizationConst.h"
-#include "CondFormats/EcalObjects/interface/EcalTPGGroups.h"
+#include "CondFormats/EcalObjects/interface/EcalTPGLutGroup.h"
 #include "CondFormats/EcalObjects/interface/EcalTPGLutIdMap.h"
+#include "CondFormats/EcalObjects/interface/EcalTPGPedestals.h"
+#include "CondFormats/EcalObjects/interface/EcalTPGWeightGroup.h"
+#include "CondFormats/EcalObjects/interface/EcalTPGWeightIdMap.h"
+#include "CondFormats/EcalObjects/interface/EcalTPGSlidingWindow.h"
+#include "CondFormats/EcalObjects/interface/EcalTPGSpike.h"
 #include "CondFormats/ESObjects/interface/ESEEIntercalibConstants.h"
 #include "CondFormats/ESObjects/interface/ESGain.h"
 #include "CondFormats/ESObjects/interface/ESIntercalibConstants.h"
@@ -118,9 +123,9 @@ int main(int argc, char** argv)
                 return 0;
         }
 
-        supported.push_back("EcalTPGGroups");
-        if (!help && obj == "EcalTPGGroups") {
-                cond::CondDBDumper<EcalTPGGroups> d(obj);
+        supported.push_back("EcalTPGLutGroup");
+        if (!help && obj == "EcalTPGLutGroup") {
+                cond::CondDBDumper<EcalTPGLutGroup> d(obj);
                 d.run(argc, argv);
                 return 0;
         }
@@ -128,6 +133,41 @@ int main(int argc, char** argv)
         supported.push_back("EcalTPGLutIdMap");
         if (!help && obj == "EcalTPGLutIdMap") {
                 cond::CondDBDumper<EcalTPGLutIdMap> d(obj);
+                d.run(argc, argv);
+                return 0;
+        }
+
+        supported.push_back("EcalTPGPedestals");
+        if (!help && obj == "EcalTPGPedestals") {
+                cond::CondDBDumper<EcalTPGPedestals> d(obj);
+                d.run(argc, argv);
+                return 0;
+        }
+
+        supported.push_back("EcalTPGWeightGroup");
+        if (!help && obj == "EcalTPGWeightGroup") {
+                cond::CondDBDumper<EcalTPGWeightGroup> d(obj);
+                d.run(argc, argv);
+                return 0;
+        }
+
+        supported.push_back("EcalTPGWeightIdMap");
+        if (!help && obj == "EcalTPGWeightIdMap") {
+                cond::CondDBDumper<EcalTPGWeightIdMap> d(obj);
+                d.run(argc, argv);
+                return 0;
+        }
+
+        supported.push_back("EcalTPGSlidingWindow");
+        if (!help && obj == "EcalTPGSlidingWindow") {
+                cond::CondDBDumper<EcalTPGSlidingWindow> d(obj);
+                d.run(argc, argv);
+                return 0;
+        }
+
+        supported.push_back("EcalTPGSpike");
+        if (!help && obj == "EcalTPGSpike") {
+                cond::CondDBDumper<EcalTPGSpike> d(obj);
                 d.run(argc, argv);
                 return 0;
         }
