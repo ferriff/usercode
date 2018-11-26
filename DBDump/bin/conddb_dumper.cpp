@@ -9,6 +9,7 @@
 #include "CondFormats/EcalObjects/interface/EcalIntercalibConstantsMC.h"
 #include "CondFormats/EcalObjects/interface/EcalLaserAlphas.h"
 #include "CondFormats/EcalObjects/interface/EcalPedestals.h"
+#include "CondFormats/EcalObjects/interface/EcalPFRecHitThresholds.h"
 #include "CondFormats/EcalObjects/interface/EcalPulseShapes.h"
 #include "CondFormats/EcalObjects/interface/EcalTimeCalibConstants.h"
 #include "CondFormats/EcalObjects/interface/EcalTPGLinearizationConst.h"
@@ -91,6 +92,13 @@ int main(int argc, char** argv)
         supported.push_back("EcalChannelStatus");
         if (!help && obj == "EcalChannelStatus") {
                 cond::CondDBDumper<EcalChannelStatus> d(obj);
+                d.run(argc, argv);
+                return 0;
+        }
+
+        supported.push_back("EcalPFRecHitThresholds");
+        if (!help && obj == "EcalPFRecHitThresholds") {
+                cond::CondDBDumper<EcalPFRecHitThresholds> d(obj);
                 d.run(argc, argv);
                 return 0;
         }
