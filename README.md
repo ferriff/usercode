@@ -10,23 +10,31 @@
 
 #### Dumper list
    * `conddb_dumper.cpp`: self-explicative via the `-h/--help` options. Currently supported objects: 
-      * `BeamSpotObjects`
-      * `ESEEIntercalibConstants`
-      * `ESGain`
-      * `ESIntercalibConstants`
-      * `EcalADCToGeVConstant`
-      * `EcalChannelStatus`
-      * `EcalClusterLocalContCorrParameters`
-      * `EcalGainRatios`
-      * `EcalIntercalibConstants`
-      * `EcalIntercalibConstantsMC`
-      * `EcalLaserAlphas`
-      * `EcalPedestals`
-      * `EcalPulseShapes`
-      * `EcalTPGLinearizationConst`
-      * `EcalTimeCalibConstants`
-      * `EcalTimeOffsetConstant`
-      * `RunInfo`
+     * BeamSpotObjects
+     * ESEEIntercalibConstants
+     * ESGain
+     * ESIntercalibConstants
+     * EcalADCToGeVConstant
+     * EcalChannelStatus
+     * EcalClusterLocalContCorrParameters
+     * EcalGainRatios
+     * EcalIntercalibConstants
+     * EcalIntercalibConstantsMC
+     * EcalLaserAlphas
+     * EcalPFRecHitThresholds
+     * EcalPedestals
+     * EcalPulseShapes
+     * EcalTPGLinearizationConst
+     * EcalTPGLutGroup
+     * EcalTPGLutIdMap
+     * EcalTPGPedestals
+     * EcalTPGSlidingWindow
+     * EcalTPGSpike
+     * EcalTPGWeightGroup
+     * EcalTPGWeightIdMap
+     * EcalTimeCalibConstants
+     * EcalTimeOffsetConstant
+     * RunInfo
    * `lava_db.cpp`: validate a tag of the ECAL monitoring corrections
    * `lava_text.cpp`: validate a set of ECAL monitoring corrections starting from a txt file with dumped-corrections
    * `lava_db_compare.cpp`: compare two tags of ECAL monitoring corrections, by
@@ -43,12 +51,13 @@
                        coherent txt file (N.B. does not need the CMSSW environment to work)
 
 #### Dumper setup
-Setup a working area for example in `CMSSW_9_0_2`. Any release `>=9XY`
+Setup a working area for example in `CMSSW_10_1_10`. Any release `>=10XY`
 should work just fine, contact me in case not. For older releases please refer to the branches
-`cmssw_8x` and `cmssw_7x` for `CMSSW_8X` and `CMSSW_7X` respectively.
+`cmssw_9x`, `cmssw_8x`, and `cmssw_7x`, for `CMSSW_9X`, `CMSSW_8X`, and `CMSSW_7X` respectively.
+Please note that not all the objects supported in the latest release are backported.
 ```bash
-cmsrel CMSSW_9_0_2
-cd CMSSW_9_0_2/src
+cmsrel CMSSW_10_1_10
+cd CMSSW_10_1_10/src
 cmsenv
 git cms-init
 git clone git@github.com:ferriff/usercode.git
