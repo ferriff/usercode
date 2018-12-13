@@ -26,6 +26,7 @@
      * EcalPulseCovariances
      * EcalPulseShapes
      * EcalSamplesCorrelation
+     * EcalSimPulseShape
      * EcalTPGLinearizationConst
      * EcalTPGLutGroup
      * EcalTPGLutIdMap
