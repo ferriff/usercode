@@ -13,6 +13,7 @@
 #include "CondFormats/EcalObjects/interface/EcalPulseShapes.h"
 #include "CondFormats/EcalObjects/interface/EcalPulseCovariances.h"
 #include "CondFormats/EcalObjects/interface/EcalSamplesCorrelation.h"
+#include "CondFormats/EcalObjects/interface/EcalSimPulseShape.h"
 #include "CondFormats/EcalObjects/interface/EcalTimeCalibConstants.h"
 #include "CondFormats/EcalObjects/interface/EcalTimeOffsetConstant.h"
 #include "CondFormats/EcalObjects/interface/EcalTPGLinearizationConst.h"
@@ -193,6 +194,13 @@ int main(int argc, char** argv)
         supported.push_back("EcalGainRatios");
         if (!help && obj == "EcalGainRatios") {
                 cond::CondDBDumper<EcalGainRatios> d(obj);
+                d.run(argc, argv);
+                return 0;
+        }
+
+        supported.push_back("EcalSimPulseShape");
+        if (!help && obj == "EcalSimPulseShape") {
+                cond::CondDBDumper<EcalSimPulseShape> d(obj);
                 d.run(argc, argv);
                 return 0;
         }

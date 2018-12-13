@@ -20,6 +20,7 @@
 #include "CondFormats/EcalObjects/interface/EcalPulseShapes.h"
 #include "CondFormats/EcalObjects/interface/EcalPulseCovariances.h"
 #include "CondFormats/EcalObjects/interface/EcalSamplesCorrelation.h"
+#include "CondFormats/EcalObjects/interface/EcalSimPulseShape.h"
 #include "CondFormats/EcalObjects/interface/EcalTimeCalibConstants.h"
 #include "CondFormats/EcalObjects/interface/EcalTimeOffsetConstant.h"
 #include "CondFormats/EcalObjects/interface/EcalTPGLinearizationConst.h"
@@ -388,6 +389,24 @@ namespace cond {
                                                 (*it).gain12Over6(), (*it).gain6Over1(),
                                                 id.rawId());
                                 }
+                        }
+
+                        void dump(FILE * fd, EcalSimPulseShape & o)
+                        {
+                                fprintf(fd, "# TI=%f EB_THR=%f  EE_THR=%f APD_THR=%f\n", o.time_interval, o.barrel_thresh, o.endcap_thresh, o.apd_thresh);
+                                fprintf(fd, "# EB shape\n");
+                                for (size_t i = 0; i < o.barrel_shape.size(); ++i) {
+                                        fprintf(fd, "%lu %f\n", i, o.barrel_shape[i]);
+                                }
+                                fprintf(fd, "\n\n# EE shape\n");
+                                for (size_t i = 0; i < o.endcap_shape.size(); ++i) {
+                                        fprintf(fd, "%lu %f\n", i, o.endcap_shape[i]);
+                                }
+                                fprintf(fd, "\n\n# APD shape\n");
+                                for (size_t i = 0; i < o.apd_shape.size(); ++i) {
+                                        fprintf(fd, "%lu %f\n", i, o.apd_shape[i]);
+                                }
+
                         }
 
                         void dump(FILE * fd, EcalPulseShapes & o)
