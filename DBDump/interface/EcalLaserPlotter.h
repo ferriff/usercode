@@ -84,7 +84,7 @@ class EcalLaserPlotter {
                 char ecalPart[3];
                 char eename[3];
 
-                char str[128];
+                char str[256];
 
                 int set_geom_;
                 int set_ch_status_;

@@ -406,7 +406,6 @@ void EcalLaserPlotter::fill_histories(time_t t)
 {
         float fracs[] = { 0.5 * (1 - 0.997), 0.5 * (1 - 0.954), 0.5 * (1 - 0.682), 0 };
 	const char * nfrac[] = { "3S", "2S", "1S", "E" };
-        char str[128];
         for (int i = 0; i < nq_; ++i) {
 	        float xm = q_[i].xlow(0.5);//median of p2
                 for (size_t j = 0; j < sizeof(fracs)/sizeof(float); ++j) {
@@ -422,7 +421,6 @@ void EcalLaserPlotter::fill_histories(time_t t)
 
 void EcalLaserPlotter::fill_slope_histories(time_t t)
 {
-  char str[128];
   float fracs[] = { 0.5 * (1 - 0.997), 0.5 * (1 - 0.954), 0.5 * (1 - 0.682), 0 };
   const char * nfrac[] = {"3S", "2S", "1S", "E" };
   for (int i = 0; i < nq_; ++i)
@@ -792,7 +790,7 @@ void EcalLaserPlotter::fill(const EcalLaserAPDPNRatios & apdpn, time_t t)
 		  }
 		hm_.h<TH2D>(temhl[isEB],"p2_map_last_IOV",&propagation_map[iz+1][1])->SetBinContent(ix,iy,1);
 		
-		char sumName[128]; 
+		char sumName[256]; 
 		if(t1<1330000000)
 		  {
 		    sprintf(sumName,"%s%s_Bad_Time_Summary",subdet[iz+1],"t1");
