@@ -11,15 +11,18 @@
 #include "CondFormats/EcalObjects/interface/EcalPedestals.h"
 #include "CondFormats/EcalObjects/interface/EcalPFRecHitThresholds.h"
 #include "CondFormats/EcalObjects/interface/EcalPulseShapes.h"
+#include "CondFormats/EcalObjects/interface/EcalPulseCovariances.h"
+#include "CondFormats/EcalObjects/interface/EcalSamplesCorrelation.h"
 #include "CondFormats/EcalObjects/interface/EcalTimeCalibConstants.h"
+#include "CondFormats/EcalObjects/interface/EcalTimeOffsetConstant.h"
 #include "CondFormats/EcalObjects/interface/EcalTPGLinearizationConst.h"
 #include "CondFormats/EcalObjects/interface/EcalTPGLutGroup.h"
 #include "CondFormats/EcalObjects/interface/EcalTPGLutIdMap.h"
 #include "CondFormats/EcalObjects/interface/EcalTPGPedestals.h"
-#include "CondFormats/EcalObjects/interface/EcalTPGWeightGroup.h"
-#include "CondFormats/EcalObjects/interface/EcalTPGWeightIdMap.h"
 #include "CondFormats/EcalObjects/interface/EcalTPGSlidingWindow.h"
 #include "CondFormats/EcalObjects/interface/EcalTPGSpike.h"
+#include "CondFormats/EcalObjects/interface/EcalTPGWeightGroup.h"
+#include "CondFormats/EcalObjects/interface/EcalTPGWeightIdMap.h"
 #include "CondFormats/ESObjects/interface/ESEEIntercalibConstants.h"
 #include "CondFormats/ESObjects/interface/ESGain.h"
 #include "CondFormats/ESObjects/interface/ESIntercalibConstants.h"
@@ -197,6 +200,20 @@ int main(int argc, char** argv)
         supported.push_back("EcalPulseShapes");
         if (!help && obj == "EcalPulseShapes") {
                 cond::CondDBDumper<EcalPulseShapes> d(obj);
+                d.run(argc, argv);
+                return 0;
+        }
+
+        supported.push_back("EcalPulseCovariances");
+        if (!help && obj == "EcalPulseCovariances") {
+                cond::CondDBDumper<EcalPulseCovariances> d(obj);
+                d.run(argc, argv);
+                return 0;
+        }
+
+        supported.push_back("EcalSamplesCorrelation");
+        if (!help && obj == "EcalSamplesCorrelation") {
+                cond::CondDBDumper<EcalSamplesCorrelation> d(obj);
                 d.run(argc, argv);
                 return 0;
         }

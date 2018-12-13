@@ -18,6 +18,9 @@
 #include "CondFormats/EcalObjects/interface/EcalGainRatios.h"
 #include "CondFormats/EcalObjects/interface/EcalPedestals.h"
 #include "CondFormats/EcalObjects/interface/EcalPulseShapes.h"
+#include "CondFormats/EcalObjects/interface/EcalPulseCovariances.h"
+#include "CondFormats/EcalObjects/interface/EcalSamplesCorrelation.h"
+#include "CondFormats/EcalObjects/interface/EcalTimeCalibConstants.h"
 #include "CondFormats/EcalObjects/interface/EcalTimeOffsetConstant.h"
 #include "CondFormats/EcalObjects/interface/EcalTPGLinearizationConst.h"
 #include "CondFormats/EcalObjects/interface/EcalTPGLutGroup.h"
@@ -402,6 +405,47 @@ namespace cond {
                                         }
                                         fprintf(fd, "  %u\n", id.rawId());
                                 }
+                        }
+
+                        void dump(FILE * fd, EcalPulseCovariances & o)
+                        {
+                                for (size_t i = 0; i < _ids.size(); ++i) {
+                                        DetId id(_ids[i]);
+                                        EcalPulseCovariances::const_iterator it = o.find(id);
+                                        if (it == o.end()) {
+                                                fprintf(stderr, "Cannot find value for DetId %u", id.rawId());
+                                        }
+                                        coord(_ids[i]);
+                                        fprintf(fd, "%d %d %d  ", _c.ix_, _c.iy_, _c.iz_);
+                                        for (int is = 0; is < EcalPulseShape::TEMPLATESAMPLES; ++is) {
+                                                for (int js = 0; js < EcalPulseShape::TEMPLATESAMPLES; ++js) {
+                                                        fprintf(fd, " %d,%d=%.10e", is, js, it->val(is,js));
+                                                }
+                                        }
+                                        fprintf(fd, "  %u\n", id.rawId());
+                                }
+                        }
+
+                        void dump(FILE * fd, EcalSamplesCorrelation & o)
+                        {
+                                fprintf(fd, "EBG12[%lu] =", o.EBG12SamplesCorrelation.size());
+                                for (auto c : o.EBG12SamplesCorrelation) fprintf(fd, " %lf", c);
+                                fprintf(fd, "\n");
+                                fprintf(fd, "EBG6 [%lu] =", o.EBG6SamplesCorrelation.size());
+                                for (auto c : o.EBG6SamplesCorrelation) fprintf(fd, " %lf", c);
+                                fprintf(fd, "\n");
+                                fprintf(fd, "EBG1 [%lu] =", o.EBG1SamplesCorrelation.size());
+                                for (auto c : o.EBG1SamplesCorrelation) fprintf(fd, " %lf", c);
+                                fprintf(fd, "\n");
+                                fprintf(fd, "EEG12[%lu] =", o.EEG12SamplesCorrelation.size());
+                                for (auto c : o.EEG12SamplesCorrelation) fprintf(fd, " %lf", c);
+                                fprintf(fd, "\n");
+                                fprintf(fd, "EEG6 [%lu] =", o.EEG6SamplesCorrelation.size());
+                                for (auto c : o.EEG6SamplesCorrelation) fprintf(fd, " %lf", c);
+                                fprintf(fd, "\n");
+                                fprintf(fd, "EEG1 [%lu] =", o.EEG1SamplesCorrelation.size());
+                                for (auto c : o.EEG1SamplesCorrelation) fprintf(fd, " %lf", c);
+                                fprintf(fd, "\n");
                         }
 
                         void dump(FILE * fd, ESEEIntercalibConstants & ic)
