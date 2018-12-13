@@ -23,7 +23,9 @@
      * EcalLaserAlphas
      * EcalPFRecHitThresholds
      * EcalPedestals
+     * EcalPulseCovariances
      * EcalPulseShapes
+     * EcalSamplesCorrelation
      * EcalTPGLinearizationConst
      * EcalTPGLutGroup
      * EcalTPGLutIdMap
