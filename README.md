@@ -54,13 +54,13 @@
                        coherent txt file (N.B. does not need the CMSSW environment to work)
 
 #### Dumper setup
-Setup a working area for example in `CMSSW_10_1_10`. Any release `>=10XY`
+Setup a working area for example in `CMSSW_10_3_0`. Any release `>=10_3_X`
 should work just fine, contact me in case not. For older releases please refer to the branches
 `cmssw_9x`, `cmssw_8x`, and `cmssw_7x`, for `CMSSW_9X`, `CMSSW_8X`, and `CMSSW_7X` respectively.
 Please note that not all the objects supported in the latest release are backported.
 ```bash
-cmsrel CMSSW_10_1_10
-cd CMSSW_10_1_10/src
+cmsrel CMSSW_10_3_0
+cd CMSSW_10_3_0/src
 cmsenv
 git cms-init
 git clone git@github.com:ferriff/usercode.git
