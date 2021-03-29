@@ -163,7 +163,7 @@ int cond::LaserValidation::execute()
         std::string tag1 = getOptionValue<std::string>("tag");
 
         session.transaction().start( true );
-        const cond::persistency::IOVProxy & iov = session.readIov(tag1, true);
+        const auto & iov = session.readIov(tag1).selectAll();
 
         cond::Time_t since = std::numeric_limits<cond::Time_t>::min();
         if(hasOptionValue("beginTime")) since = getOptionValue<cond::Time_t>("beginTime");
@@ -194,15 +194,15 @@ int cond::LaserValidation::execute()
 
         std::cout << "since: " << since << "   till: " << till << "\n";
 
-        int niov = -1;
+        size_t niov = 0;
         if (hasOptionValue("niov")) niov = getOptionValue<int>("niov");
-        static const unsigned int nIOVS = std::distance(iov.begin(), iov.end());
+        static const size_t nIOVS = iov.size();
 
         int prescale = 1;
         if (hasOptionValue("prescale")) prescale = getOptionValue<int>("prescale");
         assert(prescale > 0);
 
-        int cnt = 0, cnt_iov = 0, one_dumped = 0;
+        size_t cnt = 0, cnt_iov = 0, one_dumped = 0;
         A res;
         time_t tb, te, tb_first = 0, te_last = 0;
         for (const auto & i : iov) {
@@ -219,7 +219,7 @@ int cond::LaserValidation::execute()
                 std::shared_ptr<A> pa = session.fetchPayload<A>(i.payloadId);
                 tb = (time_t)i.since>>32;
                 te = (time_t)i.till>>32;
-                printf("--> %lu %lu (%d/%d)\n", tb, te, cnt, nIOVS);
+                printf("--> %lu %lu (%ld/%ld)\n", tb, te, cnt, nIOVS);
                 if (tb - tb_first > t_interval) {
                         printf("... writing tag with begin: %lu end: %lu (deltaT: %lu) - t_interval: %lu\n", tb_first, te_last, te_last - tb_first, t_interval);
                         if (!txt) dump_time_average(fdump, tb_first, te_last);

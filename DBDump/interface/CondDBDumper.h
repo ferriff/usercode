@@ -110,7 +110,7 @@ namespace cond {
                         {
                                 FILE * fd = fopen(filename, "a");
                                 if (!fd) {
-                                        char err[256];
+                                        char err[1024];
                                         sprintf(err, "[cond::ICDump::dump] Impossible to open file `%s' for dumping:", filename);
                                         perror(err);
                                         exit(1);
@@ -163,12 +163,12 @@ namespace cond {
                                 printf("%s %s\n", connect.c_str(), tag.c_str());
 
                                 session.transaction().start( true );
-                                cond::persistency::IOVProxy iov = session.readIov(tag, true);
-                                std::string obj_type = iov.payloadObjectType();
+                                const auto & iov = session.readIov(tag).selectAll();
+                                //std::string obj_type = iov.payloadObjectType();
 
                                 auto first_iov = iov.begin();
                                 auto last_iov  = iov.begin();
-                                for (int i = 0; i < iov.loadedSize() - 1; ++i) ++last_iov;
+                                for (int i = 0; i < (int)iov.size() - 1; ++i) ++last_iov;
 
                                 std::cout << (*first_iov).since << " " << (*last_iov).since << "\n";
                                 char filename[512];

@@ -204,14 +204,15 @@ int cond::LaserValidation::execute()
 
         // loads the tag with its IOV list
         std::string tag = getOptionValue<std::string>("tag");
-        cond::persistency::IOVProxy iov = condDbSession.readIov(tag, true);
+        auto iov_p = condDbSession.readIov(tag);
+        const auto & iov = condDbSession.readIov(tag).selectAll();
 
         // loads the geometry file 
         std::string geom = hasOptionValue("geom") ? getOptionValue<std::string>("geom") : "detid_geom.dat";
         std::string output = hasOptionValue("output") ? getOptionValue<std::string>("output") : "ecallaserplotter.root";
 
 
-        int nIOVTree = 0;
+        size_t nIOVTree = 0;
         bool updateTree = false;
         int upd = 0;
         if (hasOptionValue("updateTree")) upd = getOptionValue<int>("updateTree");
@@ -230,15 +231,15 @@ int cond::LaserValidation::execute()
         if( hasOptionValue("endTime" )) till = getOptionValue<cond::Time_t>("endTime");
 
         since = std::max((cond::Time_t)2, since ); 
-        till  = std::min(till,  iov.getLast().since);
+        till  = std::min(till,  iov_p.getLast().since);
 
         if(_verbose) std::cout << "tag " << tag << std::endl ;
         if(_verbose) std::cout << "since/till  " << since << "/"<< till<< std::endl ;
 
-        int niov = -1;
+        size_t niov = 0;
         if (hasOptionValue("niov")) niov = getOptionValue<int>("niov");
 
-        int skipiov = -1;
+        size_t skipiov = 0;
         if (hasOptionValue("skipiov")) skipiov = getOptionValue<int>("skipiov");
 
         int NiovAppend = -1;
@@ -254,7 +255,7 @@ int cond::LaserValidation::execute()
         if(_verbose) std::cout << "iterate over the IOVs "  << std::endl ;
 
         //for (cond::persistency::IOVProxy::Iterator ita = iov.begin(); ita != iov.end() ; ++ita ) {
-        int cnt = 0, cnt_iov = 0;
+        size_t cnt = 0, cnt_iov = 0;
         for (const auto & i : iov) {
                 ++cnt_iov;
                 if (i.since < since || i.till > till) continue;

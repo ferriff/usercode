@@ -168,34 +168,33 @@ int cond::LaserValidation::execute()
         //bool verbose = hasOptionValue("verbose");
 
         session.transaction().start( true );
-        cond::persistency::IOVProxy iov = session.readIov(tag, true);
+        const auto & iov = session.readIov(tag).selectAll();
 
         std::cout << "since: " << since << "   till: " << till << "\n";
 
-        int niov = -1;
+        size_t niov = 0;
         if (hasOptionValue("niov")) niov = getOptionValue<int>("niov");
 
         int prescale = 1;
         if (hasOptionValue("prescale")) prescale = getOptionValue<int>("prescale");
         assert(prescale > 0);
 
-        static const unsigned int nIOVS = std::distance(iov.begin(), iov.end());
+        static const size_t nIOVS = iov.size();
 
         std::cout << "nIOVS: " << nIOVS << "\n";
 
         typedef unsigned int LuminosityBlockNumber_t;
         typedef unsigned int RunNumber_t;
 
-        int cnt = -1;
+        size_t cnt = 0;
         for (const auto & i : iov) {
                 //if (cnt == 0 || cnt < 2) continue;
                 ++cnt;
-                if (cnt % prescale != 0) continue;
+                if (cnt % prescale != 1) continue;
                 if (i.since < since || i.till > till) continue;
+                if (niov > 0 && cnt > niov) break;
                 std::cout << cnt << " " << i.since << " -> " << i.till << "\n";
-
                 std::shared_ptr<A> pa = session.fetchPayload<A>(i.payloadId);
-                if (niov > 0 && cnt >= niov) break;
                 //if (fdump) dump_txt(fdump, *pa, (time_t)i.since>>32, (time_t)i.till>>32);
                 if (fdump) dump_etaphi(fdump, *pa, (time_t)i.since>>32, (time_t)i.till>>32);
         }

@@ -204,8 +204,9 @@ int cond::LaserValidation::execute()
         if( hasOptionValue("endTime" )) till = getOptionValue<cond::Time_t>("endTime");
 
         session.transaction().start( true );
-        const cond::persistency::IOVProxy & iov1 = session.readIov(tag1, true);
-        cond::persistency::IOVProxy iov2 = session.readIov(tag2, true);
+        const auto & iov1 = session.readIov(tag1).selectAll();
+        auto iov2_p = session.readIov(tag2);
+        const auto & iov2 = iov2_p.selectAll();
 
         FILE * fdump = NULL;
         if (hasOptionValue("dump")) {
@@ -217,21 +218,21 @@ int cond::LaserValidation::execute()
 
         std::cout << "since: " << since << "   till: " << till << "\n";
 
-        int niov = -1;
+        size_t niov = 0;
         if (hasOptionValue("niov")) niov = getOptionValue<int>("niov");
 
         int prescale = 1;
         if (hasOptionValue("prescale")) prescale = getOptionValue<int>("prescale");
         assert(prescale > 0);
 
-        static const unsigned int nIOVS = std::distance(iov1.begin(), iov1.end());
+        static const size_t nIOVS = iov1.size();
 
         std::cout << "nIOVS: " << nIOVS << "\n";
 
         typedef unsigned int LuminosityBlockNumber_t;
         typedef unsigned int RunNumber_t;
 
-        int cnt = 0, cnt_iov = 0;
+        size_t cnt = 0, cnt_iov = 0;
         EcalLaserDumper ld(odir);
         A res;
         for (const auto & i : iov1) {
@@ -240,7 +241,7 @@ int cond::LaserValidation::execute()
                 if (cnt_iov % prescale != 0) continue;
                 ++cnt;
                 std::cout << cnt_iov << " " << i.since << " -> " << i.till << " " << cnt << "\n";
-                auto j = iov2.getInterval(i.since);
+                auto j = iov2_p.getInterval(i.since);
                 auto ik = ++(iov2.find(i.since));
                 if (ik == iov2.end()) {
                         fprintf(stderr, "Error: reached the end of tag -T, continuing\n");

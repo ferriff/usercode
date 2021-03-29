@@ -153,8 +153,9 @@ int cond::LaserValidation::execute()
         if( hasOptionValue("endTime" )) till = getOptionValue<cond::Time_t>("endTime");
 
         session.transaction().start( true );
-        const cond::persistency::IOVProxy & iov1 = session.readIov(tag1, true);
-        cond::persistency::IOVProxy iov2 = session.readIov(tag2, true);
+        const auto & iov1 = session.readIov(tag1).selectAll();
+        auto iov2_p = session.readIov(tag2);
+        const auto & iov2 = iov2_p.selectAll();
 
         FILE * fdump = NULL;
         if (hasOptionValue("dump")) {
@@ -185,7 +186,7 @@ int cond::LaserValidation::execute()
                 if (cnt_iov % prescale != 0) continue;
                 ++cnt;
                 std::cout << cnt_iov << " " << i.since << " -> " << i.till << " " << cnt << "\n";
-                auto j = iov2.getInterval(i.since);
+                auto j = iov2_p.getInterval(i.since);
                 std::shared_ptr<A> pa = session.fetchPayload<A>(i.payloadId);
                 std::shared_ptr<A> pb = session.fetchPayload<A>(j.payloadId);
                 merge(*pa, *pb, res);

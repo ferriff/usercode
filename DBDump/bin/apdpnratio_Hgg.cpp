@@ -284,7 +284,7 @@ int cond::APDPNRatioHgg::execute()
         std::string tag1 = getOptionValue<std::string>("tag");
 
         session.transaction().start( true );
-        const cond::persistency::IOVProxy & iov = session.readIov(tag1, true);
+        const auto & iov = session.readIov(tag1).selectAll();
 
         cond::Time_t since = std::numeric_limits<cond::Time_t>::min();
         if(hasOptionValue("beginTime")) since = getOptionValue<cond::Time_t>("beginTime");
@@ -327,14 +327,14 @@ int cond::APDPNRatioHgg::execute()
 
         std::cout << "since: " << since << "   till: " << till << "\n";
 
-        int niov = -1;
+        size_t niov = 0;
         if (hasOptionValue("niov")) niov = getOptionValue<int>("niov");
 
-        static const unsigned int nIOVS = std::distance(iov.begin(), iov.end());
+        static const size_t nIOVS = iov.size();
 
         std::cout << "nIOVS: " << nIOVS << "\n";
 
-        int cnt = 0, cnt_iov = 0; //, one_dumped = 0;
+        size_t cnt = 0, cnt_iov = 0; //, one_dumped = 0;
         A res;
         time_t tb, te;
         for (const auto & i : iov) {
@@ -347,7 +347,7 @@ int cond::APDPNRatioHgg::execute()
                 tb = (time_t)i.since>>32;
                 te = (time_t)i.till>>32;
                 reset_ring_average();
-                printf("--> %lu %lu (%d/%d)\n", tb, te, cnt, nIOVS);
+                printf("--> %lu %lu (%ld/%ld)\n", tb, te, cnt, nIOVS);
                 reset_ring_average();
                 fill_ring_average(*pa);
                 dump_ring_average(fdump, tb, te, fout);

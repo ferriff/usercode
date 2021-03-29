@@ -88,7 +88,7 @@ int cond::LaserValidation::execute()
         if( hasOptionValue("endTime" )) till = getOptionValue<cond::Time_t>("endTime");
 
         session.transaction().start( true );
-        const cond::persistency::IOVProxy & iov = session.readIov(tag, true);
+        const auto & iov = session.readIov(tag).selectAll();
 
         std::cout << "tag " << tag << " , total of " << std::distance(iov.begin(), iov.end()) << "iov(s)\n";
         std::cout << "since: " << since << "   till: " << till << "\n";

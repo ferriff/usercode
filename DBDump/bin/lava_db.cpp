@@ -76,7 +76,7 @@ int cond::LaserValidation::execute()
         //bool verbose = hasOptionValue("verbose");
 
         session.transaction().start( true );
-        const cond::persistency::IOVProxy & iov = session.readIov(tag, true);
+        const auto & iov = session.readIov(tag).selectAll();
 
         //since = std::max((cond::Time_t)2, cond::timeTypeSpecs[iov.timetype()].beginValue); // avoid first IOV
         //till  = std::min(till,  cond::timeTypeSpecs[iov.timetype()].endValue);

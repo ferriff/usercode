@@ -107,7 +107,7 @@ int cond::LaserValidation::execute()
         std::string tag1 = getOptionValue<std::string>("tag");
 
         session.transaction().start( true );
-        const cond::persistency::IOVProxy & iov = session.readIov(tag1, true);
+        const auto & iov = session.readIov(tag1).selectAll();
 
         cond::Time_t since = std::numeric_limits<cond::Time_t>::min();
         if(hasOptionValue("beginTime")) since = getOptionValue<cond::Time_t>("beginTime");
