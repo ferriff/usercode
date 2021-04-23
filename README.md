@@ -75,5 +75,18 @@ Example: how to dump an object from the default Frontier DataBase
 conddb_dumper -O EcalIntercalibConstants -t EcalIntercalibConstants_2012ABCD_offline
 ```
 
+Example: how to use dumper python bindings
+```python
+import ROOT
+import os
+CMSSW_BASE = os.getenv('CMSSW_BASE')
+ROOT.gInterpreter.ProcessLine('#include "usercode/DBDump/interface/CondDBDumper.h"')
+ROOT.gSystem.Load(CMSSW_BASE+'/lib/slc7_amd64_gcc820/libusercodeDBDump.so')
+db = ROOT.cond.CondDBDumper("ESIntercalibConstants")
+```
+
+
 #### Additional documentation
    * https://twiki.cern.ch/twiki/bin/view/CMS/DBDump
+
+
