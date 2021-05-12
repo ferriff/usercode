@@ -186,7 +186,7 @@ namespace cond {
                                         ++cnt;
                                         print(cnt_iov, i);
                                         std::shared_ptr<C> pa = session.fetchPayload<C>(i.payloadId);
-                                        if (!join) { 
+                                        if (!join) {
 					  sprintf(filename, "dump_%s__since_%08llu_till_%08llu.dat", _class_name.c_str(), i.since, i.till);
 					  if (hasOptionValue("output")) sprintf(filename, "%s_%d.dat", _output_name(getOptionValue<std::string>("output").c_str()), cnt);
                                         }

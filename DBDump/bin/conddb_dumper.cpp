@@ -29,8 +29,6 @@
 #include "CondFormats/ESObjects/interface/ESIntercalibConstants.h"
 #include "CondFormats/RunInfo/interface/RunInfo.h"
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
 
 int usage(char * s)
 {
@@ -274,16 +272,4 @@ int main(int argc, char** argv)
                 "Please check the spelling and, if correct, ask the experts for its implementation.\n", obj.c_str());
         list_supported(supported);
         return 2;
-}
-
-
-//---Python bindings
-namespace py = pybind11;
-
-// test
-PYBIND11_MODULE(conddb_dumper, m)
-{
-  m.def("usage",          &usage);
-    //.def("list_supported", &list_supported)
-    //.def("main",           &main);
 }
