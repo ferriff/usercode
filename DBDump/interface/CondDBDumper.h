@@ -186,7 +186,10 @@ namespace cond {
                                         ++cnt;
                                         print(cnt_iov, i);
                                         std::shared_ptr<C> pa = session.fetchPayload<C>(i.payloadId);
-                                        if (!join) sprintf(filename, "dump_%s__since_%08llu_till_%08llu.dat", _class_name.c_str(), i.since, i.till);
+                                        if (!join) { 
+					  sprintf(filename, "dump_%s__since_%08llu_till_%08llu.dat", _class_name.c_str(), i.since, i.till);
+					  if (hasOptionValue("output")) sprintf(filename, "%s_%d.dat", _output_name(getOptionValue<std::string>("output").c_str()), cnt);
+					}
                                         fout = open_file(filename);
                                         if (join) fprintf(fout, "# new IOV: since %llu  till %llu\n", i.since, i.till);
                                         dump(fout, *pa);
@@ -525,6 +528,14 @@ namespace cond {
                 private:
                         std::string _class_name;
                         std::vector<DetId> _ids;
+			const char* _output_name (std::string opt_output_name)
+			{
+			  // if the output name was given with file extension, remove it
+			  size_t pos_ext = opt_output_name.find_last_of("."); 
+			  if (pos_ext != std::string::npos)  opt_output_name = opt_output_name.substr(0, pos_ext);
+			  return opt_output_name.c_str();
+			}
+
         };
 }
 
