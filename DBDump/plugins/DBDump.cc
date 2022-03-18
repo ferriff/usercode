@@ -55,7 +55,7 @@ Implementation:
 #include "CalibCalorimetry/EcalLaserCorrection/interface/EcalLaserDbService.h"
 #include "CalibCalorimetry/EcalLaserCorrection/interface/EcalLaserDbRecord.h"
 
-#include "Geometry/CaloEventSetup/interface/CaloTopologyRecord.h"
+#include "Geometry/Records/interface/CaloTopologyRecord.h"
 //#include "Geometry/Records/interface/IdealGeometryRecord.h"
 //#include "Geometry/EcalMapping/interface/EcalMappingRcd.h"
 #include "Geometry/CaloGeometry/interface/CaloGeometry.h"
