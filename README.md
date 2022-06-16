@@ -61,7 +61,7 @@ to the branches `cmssw12x_prior_12_3_5`, `cmssw_11x`, `cmssw_10x`, `cmssw_9x`,
 `CMSSW_8X`, and `CMSSW_7X` respectively. The branch `cmssw12x_prior_12_3_5`
 has the old BS methods to retrieve `z()`, `zError()`, `sigmaZ()`,
 `sigmaZError()`, i.e.  `GetZ()`, `GetZError()`, `GetSigmaZ()`,
-`GetSigmaZError()`, so please use it if you are in a `12x` series that gives
+`GetSigmaZError()`: please use it if you are in a `12x` series that gives
 the corresponding compilation errors. Starting from not later than `12_3_5`, the
 new methods are used.
 Please note that not all the objects supported in the latest release are backported.
