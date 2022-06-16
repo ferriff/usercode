@@ -54,10 +54,16 @@
                        coherent txt file (N.B. does not need the CMSSW environment to work)
 
 #### Dumper setup
-Setup a working area for example in `CMSSW_12_2_1`. Any release `>=12_0_0`
+Setup a working area for example in `CMSSW_12_3_5`. Any release `>=12_3_5`
 should work just fine, contact me in case not. For older releases please refer
-to the branches `cmssw_11x`, `cmssw_10x`, `cmssw_9x`, `cmssw_8x`, and `cmssw_7x`, for
-`CMSSW_11X`, `CMSSW_10X`, `CMSSW_9X`, `CMSSW_8X`, and `CMSSW_7X` respectively.
+to the branches `cmssw12x_prior_12_3_5`, `cmssw_11x`, `cmssw_10x`, `cmssw_9x`,
+`cmssw_8x`, and `cmssw_7x`, for `CMSSW_11X`, `CMSSW_10X`, `CMSSW_9X`,
+`CMSSW_8X`, and `CMSSW_7X` respectively. The branch `cmssw12x_prior_12_3_5`
+has the old BS methods to retrieve `z()`, `zError()`, `sigmaZ()`,
+`sigmaZError()`, i.e.  `GetZ()`, `GetZError()`, `GetSigmaZ()`,
+`GetSigmaZError()`, so please use it if you are in a `12x` series that gives
+the corresponding compilation errors. Starting from not later than `12_3_5`, the
+new methods are used.
 Please note that not all the objects supported in the latest release are backported.
 ```bash
 cmsrel CMSSW_12_2_1
