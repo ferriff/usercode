@@ -55,7 +55,7 @@ Implementation:
 #include "CalibCalorimetry/EcalLaserCorrection/interface/EcalLaserDbService.h"
 #include "CalibCalorimetry/EcalLaserCorrection/interface/EcalLaserDbRecord.h"
 
-#include "Geometry/CaloEventSetup/interface/CaloTopologyRecord.h"
+#include "Geometry/Records/interface/CaloTopologyRecord.h"
 //#include "Geometry/Records/interface/IdealGeometryRecord.h"
 //#include "Geometry/EcalMapping/interface/EcalMappingRcd.h"
 #include "Geometry/CaloGeometry/interface/CaloGeometry.h"
@@ -109,41 +109,50 @@ class DBDump : public edm::EDAnalyzer {
       bool dumpIC_;
       bool plotIC_;
       edm::ESHandle<EcalIntercalibConstants> ic_;
+      edm::ESGetToken<EcalIntercalibConstants, EcalIntercalibConstantsRcd> icToken_;
       edm::ESHandle<EcalIntercalibConstantsMC> icMC_;
+      edm::ESGetToken<EcalIntercalibConstantsMC, EcalIntercalibConstantsMCRcd> icMCToken_;
 
       // time-calibration constants
       bool dumpTC_;
       bool plotTC_;
       edm::ESHandle<EcalTimeCalibConstants> tc_;
+      edm::ESGetToken<EcalTimeCalibConstants, EcalTimeCalibConstantsRcd> tcToken_;
 
       // ADCToGeV constant
       bool dumpADCToGeV_;
       edm::ESHandle<EcalADCToGeVConstant> adcToGeV_;
+      edm::ESGetToken<EcalADCToGeVConstant, EcalADCToGeVConstantRcd> adcToGeVToken_;
 
       // laser transparency measurements
       bool dumpTransp_;
       bool plotTransp_;
       edm::ESHandle<EcalLaserAPDPNRatios> apdpn_;
+      edm::ESGetToken<EcalLaserAPDPNRatios, EcalLaserAPDPNRatiosRcd> apdpnToken_;
 
       // laser transparency corrections
       bool dumpTranspCorr_;
       bool plotTranspCorr_;
       edm::ESHandle<EcalLaserDbService> laser_;
+      edm::ESGetToken<EcalLaserDbService, EcalLaserDbRecord> laserToken_;
 
       // channel status map
       bool dumpChStatus_;
       bool plotChStatus_;
       edm::ESHandle<EcalChannelStatus> chStatus_;
+      edm::ESGetToken<EcalChannelStatus, EcalChannelStatusRcd> chStatusToken_;
 
       // pedestals
       bool dumpPedestals_;
       bool plotPedestals_;
       edm::ESHandle<EcalPedestals> ped_;
+      edm::ESGetToken<EcalPedestals, EcalPedestalsRcd> pedToken_;
 
       // gain ratios
       bool dumpGainRatios_;
       bool plotGainRatios_;
       edm::ESHandle<EcalGainRatios> gr_;
+      edm::ESGetToken<EcalGainRatios, EcalGainRatiosRcd> grToken_;
 
       HistoManager histos;
 
@@ -181,27 +190,37 @@ DBDump::DBDump(const edm::ParameterSet& ps) :
         il_(0),
         first_(false) // do not pass if not needed
 {
-	outPlot_ = ps.getParameter<bool>("outPlot");
-	outDump_ = ps.getParameter<bool>("outDump");
-	outDumpFile_ = ps.getParameter<std::string>("outDumpFile");
-	outPlotFile_ = ps.getParameter<std::string>("outPlotFile");
+        icToken_       = esConsumes<EcalIntercalibConstants, EcalIntercalibConstantsRcd>();
+        icMCToken_     = esConsumes<EcalIntercalibConstantsMC, EcalIntercalibConstantsMCRcd>();
+        tcToken_       = esConsumes<EcalTimeCalibConstants, EcalTimeCalibConstantsRcd>();
+        adcToGeVToken_ = esConsumes<EcalADCToGeVConstant, EcalADCToGeVConstantRcd>();
+        apdpnToken_    = esConsumes<EcalLaserAPDPNRatios, EcalLaserAPDPNRatiosRcd>();
+        laserToken_    = esConsumes<EcalLaserDbService, EcalLaserDbRecord>();
+        chStatusToken_ = esConsumes<EcalChannelStatus, EcalChannelStatusRcd>();
+        pedToken_      = esConsumes<EcalPedestals, EcalPedestalsRcd>();
+        grToken_       = esConsumes<EcalGainRatios, EcalGainRatiosRcd>();
+
+	outPlot_        = ps.getParameter<bool>("outPlot");
+	outDump_        = ps.getParameter<bool>("outDump");
+	outDumpFile_    = ps.getParameter<std::string>("outDumpFile");
+	outPlotFile_    = ps.getParameter<std::string>("outPlotFile");
 	// inter-calibration constants
-	dumpIC_ = ps.getParameter<bool>("dumpIC");
-	plotIC_ = ps.getParameter<bool>("plotIC");
+	dumpIC_         = ps.getParameter<bool>("dumpIC");
+	plotIC_         = ps.getParameter<bool>("plotIC");
 	// time-calibration constants
-	dumpTC_ = ps.getParameter<bool>("dumpTC");
-	plotTC_ = ps.getParameter<bool>("plotTC");
+	dumpTC_         = ps.getParameter<bool>("dumpTC");
+	plotTC_         = ps.getParameter<bool>("plotTC");
 	// ADCToGeV constant
-	dumpADCToGeV_ = ps.getParameter<bool>("dumpADCToGeV");
+	dumpADCToGeV_   = ps.getParameter<bool>("dumpADCToGeV");
 	// laser transparency measurements
-	dumpTransp_ = ps.getParameter<bool>("dumpTransp");
-	plotTransp_ = ps.getParameter<bool>("plotTransp");
+	dumpTransp_     = ps.getParameter<bool>("dumpTransp");
+	plotTransp_     = ps.getParameter<bool>("plotTransp");
 	// channel status map
-	dumpChStatus_ = ps.getParameter<bool>("dumpChStatus");
-	plotChStatus_ = ps.getParameter<bool>("plotChStatus");
+	dumpChStatus_   = ps.getParameter<bool>("dumpChStatus");
+	plotChStatus_   = ps.getParameter<bool>("plotChStatus");
 	// pedestals
-	dumpPedestals_ = ps.getParameter<bool>("dumpPedestals");
-	plotPedestals_ = ps.getParameter<bool>("plotPedestals");
+	dumpPedestals_  = ps.getParameter<bool>("dumpPedestals");
+	plotPedestals_  = ps.getParameter<bool>("plotPedestals");
 	// gain ratios
 	dumpGainRatios_ = ps.getParameter<bool>("dumpGainRatios");
 	plotGainRatios_ = ps.getParameter<bool>("plotGainRatios");
@@ -254,23 +273,23 @@ DBDump::DBDump(const edm::ParameterSet& ps) :
 
 void DBDump::setDumpFalse()
 {
-	dumpIC_ = false;
-	dumpTC_ = false;
-	dumpADCToGeV_ = false;
-	dumpTransp_ = false;
+	dumpIC_         = false;
+	dumpTC_         = false;
+	dumpADCToGeV_   = false;
+	dumpTransp_     = false;
 	dumpTranspCorr_ = false;
-	dumpChStatus_ = false;
-	dumpPedestals_ = false;
+	dumpChStatus_   = false;
+	dumpPedestals_  = false;
 }
 
 void DBDump::setPlotFalse()
 {
-	plotIC_ = false;
-	plotTC_ = false;
-	plotTransp_ = false;
+	plotIC_         = false;
+	plotTC_         = false;
+	plotTransp_     = false;
 	plotTranspCorr_ = false;
-	plotChStatus_ = false;
-	plotPedestals_ = false;
+	plotChStatus_   = false;
+        plotPedestals_  = false;
 }
 
 
@@ -304,8 +323,9 @@ DBDump::analyze(const edm::Event& ev, const edm::EventSetup& es)
         //es.get<EcalTimeCalibConstantsRcd>().get( tc_ );
         //es.get<CaloGeometryRecord>().get(caloGeometry_);
         //geo_ = caloGeometry_.product();
-        edm::ESHandle< EcalElectronicsMapping > ecalmapping;
-        es.get<EcalMappingRcd>().get(ecalmapping);
+        //// uncomment below if needed
+        //edm::ESHandle< EcalElectronicsMapping > ecalmapping;
+        //es.get<EcalMappingRcd>().get(ecalmapping);
 
         iov_last_ = ev.time().unixTime();
         if (iov_first_ == -1) iov_first_ = iov_last_;
@@ -319,14 +339,14 @@ DBDump::analyze(const edm::Event& ev, const edm::EventSetup& es)
         if (atLeastOneDump || atLeastOnePlot) {
 
                 if (dumpIC_ || plotIC_) {
-                        es.get<EcalIntercalibConstantsRcd>().get(ic_);
-                        es.get<EcalIntercalibConstantsRcd>().get(icMC_);
+                        ic_   = es.getHandle(icToken_);
+                        icMC_ = es.getHandle(icMCToken_);
                 }
-                if (dumpChStatus_   || plotChStatus_ || dumpTransp_ || plotTransp_)   es.get<EcalChannelStatusRcd>().get(chStatus_);
-                if (dumpPedestals_  || plotPedestals_)  es.get<EcalPedestalsRcd>().get(ped_);
-                if (dumpGainRatios_ || plotGainRatios_) es.get<EcalGainRatiosRcd>().get(gr_);
-                if (dumpTransp_     || plotTransp_)     es.get<EcalLaserAPDPNRatiosRcd>().get(apdpn_);
-                if (dumpTranspCorr_ || plotTranspCorr_) es.get<EcalLaserDbRecord>().get(laser_);
+                if (dumpChStatus_   || plotChStatus_ || dumpTransp_ || plotTransp_)   chStatus_ = es.getHandle(chStatusToken_);
+                if (dumpPedestals_  || plotPedestals_)  ped_ = es.getHandle(pedToken_);
+                if (dumpGainRatios_ || plotGainRatios_) gr_ = es.getHandle(grToken_);
+                if (dumpTransp_     || plotTransp_)     apdpn_ = es.getHandle(apdpnToken_);
+                if (dumpTranspCorr_ || plotTranspCorr_) laser_ = es.getHandle(laserToken_);
 
                 // if you need to average and use the average later on...
                 if (first_) {
@@ -531,7 +551,7 @@ DBDump::analyze(const edm::Event& ev, const edm::EventSetup& es)
                 }
         }
         if ( dumpADCToGeV_ ) {
-                es.get<EcalADCToGeVConstantRcd>().get(adcToGeV_);
+                adcToGeV_ = es.getHandle(adcToGeVToken_);
                 ofile_ << "ADCToGeV  EB= " << adcToGeV_->getEBValue() << "  EE= " << adcToGeV_->getEEValue() << "\n";
         }
         ++niov_;

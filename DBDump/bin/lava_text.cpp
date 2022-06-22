@@ -87,6 +87,7 @@ int main( int argc, char** argv )
                                 printf("option %s", long_options[option_index].name);
                                 if (optarg) printf(" with arg %s", optarg);
                                 printf("\n");
+                                break;
                         case 'b':
                                 br = atoi(optarg);
                                 printf("break: %d\n", br);
