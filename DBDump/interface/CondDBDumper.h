@@ -533,8 +533,8 @@ namespace cond {
 
                         void dump(FILE * fd, BeamSpotObjects & bs)
                         {
-                                fprintf(fd, "z= %f  z_err= %f  sigma_z= %f sigma_z_err= %f\n",
-                                        bs.z(), bs.zError(), bs.sigmaZ(), bs.sigmaZError());
+//                                fprintf(fd, "z= %f  z_err= %f  sigma_z= %f sigma_z_err= %f\n",
+//                                        bs.z(), bs.zError(), bs.sigmaZ(), bs.sigmaZError());
                         }
 
 
