@@ -8,6 +8,7 @@
 #include "CondFormats/EcalObjects/interface/EcalIntercalibConstants.h"
 #include "CondFormats/EcalObjects/interface/EcalIntercalibConstantsMC.h"
 #include "CondFormats/EcalObjects/interface/EcalLaserAlphas.h"
+#include "CondFormats/EcalObjects/interface/EcalLaserAPDPNRatios.h"
 #include "CondFormats/EcalObjects/interface/EcalPedestals.h"
 #include "CondFormats/EcalObjects/interface/EcalPFRecHitThresholds.h"
 #include "CondFormats/EcalObjects/interface/EcalPulseShapes.h"
@@ -89,6 +90,13 @@ int main(int argc, char** argv)
         supported.push_back("EcalLaserAlphas");
         if (!help && obj == "EcalLaserAlphas") {
                 cond::CondDBDumper<EcalLaserAlphas> d(obj);
+                d.run(argc, argv);
+                return 0;
+        }
+
+        supported.push_back("EcalLaserAPDPNRatios");
+        if (!help && obj == "EcalLaserAPDPNRatios") {
+                cond::CondDBDumper<EcalLaserAPDPNRatios> d(obj);
                 d.run(argc, argv);
                 return 0;
         }

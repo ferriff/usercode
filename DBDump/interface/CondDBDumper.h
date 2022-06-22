@@ -16,6 +16,7 @@
 #include "CondFormats/EcalObjects/interface/EcalClusterLocalContCorrParameters.h"
 #include "CondFormats/EcalObjects/interface/EcalCondObjectContainer.h"
 #include "CondFormats/EcalObjects/interface/EcalGainRatios.h"
+#include "CondFormats/EcalObjects/interface/EcalLaserAPDPNRatios.h"
 #include "CondFormats/EcalObjects/interface/EcalPedestals.h"
 #include "CondFormats/EcalObjects/interface/EcalPulseShapes.h"
 #include "CondFormats/EcalObjects/interface/EcalPulseCovariances.h"
@@ -392,6 +393,18 @@ namespace cond {
                                                 (*it).gain12Over6(), (*it).gain6Over1(),
                                                 id.rawId());
                                 }
+                        }
+
+                        void dump(FILE * fd, EcalLaserAPDPNRatios & o)
+                        {
+                            for (size_t i = 0; i < _ids.size(); ++i) {
+                                DetId id(_ids[i]);
+                                auto it = o.getLaserMap().find(id);
+                                coord(_ids[i]);                                
+                                fprintf(fd, "%d %d %d %f %f %f %d\n", _c.ix_, _c.iy_, _c.iz_, 
+                                        (*it).p1, (*it).p2, (*it).p3,
+                                        id.rawId());                                
+                            }
                         }
 
                         void dump(FILE * fd, EcalSimPulseShape & o)
