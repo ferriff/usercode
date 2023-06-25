@@ -16,6 +16,7 @@
 #include "CondFormats/EcalObjects/interface/EcalClusterLocalContCorrParameters.h"
 #include "CondFormats/EcalObjects/interface/EcalCondObjectContainer.h"
 #include "CondFormats/EcalObjects/interface/EcalGainRatios.h"
+#include "CondFormats/EcalObjects/interface/EcalLaserAPDPNRatios.h"
 #include "CondFormats/EcalObjects/interface/EcalPedestals.h"
 #include "CondFormats/EcalObjects/interface/EcalPulseShapes.h"
 #include "CondFormats/EcalObjects/interface/EcalPulseCovariances.h"
@@ -51,8 +52,9 @@ namespace cond {
                                 addAuthenticationOptions();
                                 addOption<bool>("join", "j", "produce one single output file, where IOVs are separated by double line break and a comment line starting with `#'");
                                 addOption<bool>("verbose","v","verbose");
-                                addOption<cond::Time_t>("beginTime","b","begin time (first since) (optional)");
-                                addOption<cond::Time_t>("endTime","e","end time (last till) (optional)");
+                                addOption<cond::Time_t>("beginTime","b","begin time (first since)");
+                                addOption<cond::Time_t>("endTime","e","end time (last till)");
+                                addOption<cond::Time_t>("iov","i","dump the conditions corresponding to this iov");
                                 addOption<int>("niov","n","number of IOVs to be dumped");
                                 addOption<int>("prescale","s","prescale factor, i.e. dump 1 in N IOVs");
                                 addOption<std::string>("object","O","object to be dumped (required)");
@@ -151,6 +153,14 @@ namespace cond {
                                 if( hasOptionValue("beginTime" )) since = getOptionValue<cond::Time_t>("beginTime");
                                 cond::Time_t till = std::numeric_limits<cond::Time_t>::max();
                                 if( hasOptionValue("endTime" )) till = getOptionValue<cond::Time_t>("endTime");
+                                cond::Time_t now = std::numeric_limits<cond::Time_t>::min();
+                                int range = 1;
+                                std::string snow = "";
+                                if( hasOptionValue("iov" )) {
+                                        range = 0;
+                                        now = getOptionValue<cond::Time_t>("iov");
+                                        snow = "iov_" + std::to_string(now) + "__";
+                                }
 
                                 bool join = false;
                                 if (hasOptionValue("join")) join = true;
@@ -183,10 +193,12 @@ namespace cond {
                                         ++cnt_iov;
                                         if (i.since < since || i.till > till) continue;
                                         if (cnt_iov % prescale != 0) continue;
+                                        if (!range && (i.till < now || i.since > now)) continue;
                                         ++cnt;
                                         print(cnt_iov, i);
                                         std::shared_ptr<C> pa = session.fetchPayload<C>(i.payloadId);
-                                        if (!join) sprintf(filename, "dump_%s__since_%08llu_till_%08llu.dat", _class_name.c_str(), i.since, i.till);
+                                        if (!range)
+                                        if (!join) sprintf(filename, "dump_%s__%ssince_%08llu_till_%08llu.dat", _class_name.c_str(), snow.c_str(), i.since, i.till);
                                         fout = open_file(filename);
                                         if (join) fprintf(fout, "# new IOV: since %llu  till %llu\n", i.since, i.till);
                                         dump(fout, *pa);
@@ -250,6 +262,19 @@ namespace cond {
                                         }
                                         coord(_ids[i]);
                                         fprintf(fd, "%d %d %d %d %d\n", _c.ix_, _c.iy_, _c.iz_, (*it).getStatusCode(), id.rawId());
+                                }
+                        }
+
+                        void dump(FILE * fd, EcalLaserAPDPNRatios & o)
+                        {
+                                for (size_t i = 0; i < _ids.size(); ++i) {
+                                        DetId id(_ids[i]);
+                                        EcalLaserAPDPNRatios::EcalLaserAPDPNRatiosMap::const_iterator it = o.getLaserMap().find(id);
+                                        if (it == o.getLaserMap().end()) {
+                                                fprintf(stderr, "Cannot find value for DetId %u", id.rawId());
+                                        }
+                                        coord(_ids[i]);
+                                        fprintf(fd, "%d %d %d %f %f %f %d\n", _c.ix_, _c.iy_, _c.iz_, (*it).p1, (*it).p2, (*it).p3, id.rawId());
                                 }
                         }
 
