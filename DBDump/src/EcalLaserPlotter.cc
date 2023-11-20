@@ -296,12 +296,8 @@ void EcalLaserPlotter::compute_averages(const EcalLaserAPDPNRatios & apdpn, time
 		// std::cout << "t1 " << t1 << "  t2 " << t2 << "  t3  " << t3 << std::endl; 
 		
 		
-		
-		
-                if (std::isinf(p2) > 0) {
+                if (std::isinf(p2)) {
 		        p2 =  FLT_MAX;
-                } else if (std::isinf(p2) < 0) {
-                        p2 = -FLT_MAX;
                 }
                 if (std::isnan(p2)) {
                         p2 =  FLT_MAX;
@@ -590,17 +586,11 @@ void EcalLaserPlotter::fill(const EcalLaserAPDPNRatios & apdpn, time_t t)
 
 		const char * temhl[] = { "EEh2", "EBh2"};
 		
-                if (std::isinf(p2) > 0) {
+                if (std::isinf(p2)) {
                         p2 =  FLT_MAX;
                         sprintf(str, "%sinfp", subdet[iz+1]);
                         hm_.h<TH2D>(temhl[isEB], str, &h2d_infp[iz + 1])->Fill(ix, iy);
                         inf_.insert((int)id);
-                        continue;
-                } else if (std::isinf(p2) < 0) {
-                        p2 = -FLT_MAX;
-                        sprintf(str, "%sinfm", subdet[iz+1]);
-                        hm_.h<TH2D>(temhl[isEB], str, &h2d_infm[iz + 1])->Fill(ix, iy);
-                        inf_.insert(-(int)id);
                         continue;
                 }
                 if (std::isnan(p2)) {

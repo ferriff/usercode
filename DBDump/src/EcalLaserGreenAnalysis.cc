@@ -268,10 +268,8 @@ void EcalLaserGreenAnalysis::compute_averages(const EcalLaserAPDPNRatios & apdpn
                 float eta = 99999;
                 p2 = (*itAPDPN).p1; // FIXME
 
-                if (std::isinf(p2) > 0) {
+                if (std::isinf(p2)) {
                         p2 =  FLT_MAX;
-                } else if (std::isinf(p2) < 0) {
-                        p2 = -FLT_MAX;
                 }
                 if (std::isnan(p2)) {
                         p2 =  FLT_MAX;
@@ -396,17 +394,11 @@ void EcalLaserGreenAnalysis::fill(const EcalLaserAPDPNRatios & apdpn, time_t t)
                 static TH2D * h2d_infm[3]; // FIXME - hope static arrays are zeroed by default
                 static TH2D * h2d_nan[3]; // FIXME - hope static arrays are zeroed by default
                 const char * temhl[] = { "EEh2", "EBh2"};
-                if (std::isinf(p2) > 0) {
+                if (std::isinf(p2)) {
                         p2 =  FLT_MAX;
                         sprintf(str, "%sinfp", subdet[iz+1]);
                         hm_.h<TH2D>(temhl[isEB], str, &h2d_infp[iz + 1])->Fill(ix, iy);
                         inf_.insert((int)id);
-                        continue;
-                } else if (std::isinf(p2) < 0) {
-                        p2 = -FLT_MAX;
-                        sprintf(str, "%sinfm", subdet[iz+1]);
-                        hm_.h<TH2D>(temhl[isEB], str, &h2d_infm[iz + 1])->Fill(ix, iy);
-                        inf_.insert(-(int)id);
                         continue;
                 }
                 if (std::isnan(p2)) {
