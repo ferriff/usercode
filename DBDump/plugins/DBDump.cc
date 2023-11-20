@@ -25,7 +25,7 @@ Implementation:
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
-#include "FWCore/Framework/interface/EDAnalyzer.h"
+#include "FWCore/Framework/interface/one/EDAnalyzer.h"
 
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/EventSetup.h"
@@ -82,7 +82,7 @@ Implementation:
 #include "TGraph.h"
 #include "TGraphAsymmErrors.h"
 
-class DBDump : public edm::EDAnalyzer {
+class DBDump : public edm::one::EDAnalyzer<edm::one::SharedResources> {
    public:
       explicit DBDump(const edm::ParameterSet&);
       ~DBDump();

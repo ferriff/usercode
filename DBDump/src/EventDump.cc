@@ -25,7 +25,7 @@ Implementation:
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
-#include "FWCore/Framework/interface/EDAnalyzer.h"
+#include "FWCore/Framework/interface/one/EDAnalyzer.h"
 
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/EventSetup.h"
@@ -88,7 +88,7 @@ Implementation:
 #include "TGraph.h"
 #include "TGraphAsymmErrors.h"
 
-class EventDump : public edm::EDAnalyzer {
+class EventDump : public edm::one::EDAnalyzer<edm::one::SharedResources> {
    public:
       explicit EventDump(const edm::ParameterSet&);
       ~EventDump();
@@ -137,40 +137,51 @@ class EventDump : public edm::EDAnalyzer {
       // inter-calibration constants
       bool dumpIC_;
       edm::ESHandle<EcalIntercalibConstants> ic_;
+      edm::ESGetToken<EcalIntercalibConstants, EcalIntercalibConstantsRcd> icToken_;
       edm::ESHandle<EcalIntercalibConstantsMC> icMC_;
+      edm::ESGetToken<EcalIntercalibConstantsMC, EcalIntercalibConstantsMCRcd> icMCToken_;
 
       // time-calibration constants
       bool dumpTC_;
       edm::ESHandle<EcalTimeCalibConstants> tc_;
+      edm::ESGetToken<EcalTimeCalibConstants, EcalTimeCalibConstantsRcd> tcToken_;
 
       // ADCToGeV constant
       bool dumpADCToGeV_;
       edm::ESHandle<EcalADCToGeVConstant> adctogev_;
+      edm::ESGetToken<EcalADCToGeVConstant, EcalADCToGeVConstantRcd> adctogevToken_;
 
       // laser transparency measurements
       bool dumpTransp_;
       edm::ESHandle<EcalLaserAPDPNRatios> apdpn_;
+      edm::ESGetToken<EcalLaserAPDPNRatios, EcalLaserAPDPNRatiosRcd> apdpnToken_;
       edm::ESHandle<EcalLaserAPDPNRatiosRef> apdpnref_;
+      edm::ESGetToken<EcalLaserAPDPNRatiosRef, EcalLaserAPDPNRatiosRefRcd> apdpnrefToken_;
 
       // laser alpha
       bool dumpAlpha_;
       edm::ESHandle<EcalLaserAlphas> alpha_;
+      edm::ESGetToken<EcalLaserAlphas, EcalLaserAlphasRcd> alphaToken_;
 
       // laser transparency corrections
       bool dumpTranspCorr_;
       edm::ESHandle<EcalLaserDbService> laser_;
+      edm::ESGetToken<EcalLaserDbService, EcalLaserDbRecord> laserToken_;
 
       // channel status map
       bool dumpChStatus_;
       edm::ESHandle<EcalChannelStatus> chStatus_;
+      edm::ESGetToken<EcalChannelStatus, EcalChannelStatusRcd> chStatusToken_;
 
       // pedestals
       bool dumpPedestals_;
       edm::ESHandle<EcalPedestals> ped_;
+      edm::ESGetToken<EcalPedestals, EcalPedestalsRcd> pedToken_;
 
       // gain ratios
       bool dumpGainRatios_;
       edm::ESHandle<EcalGainRatios> gr_;
+      edm::ESGetToken<EcalGainRatios, EcalGainRatiosRcd> grToken_;
 
       // event info
       bool dumpEvent_;
@@ -221,7 +232,8 @@ class EventDump : public edm::EDAnalyzer {
 
       HistoManager histos;
 
-      //edm::ESHandle<CaloGeometry> caloGeometry_;
+      edm::ESHandle<CaloGeometry> geometry_;
+      edm::ESGetToken<CaloGeometry, CaloGeometryRecord> geometryToken_;
       const CaloGeometry * geometry;
 
       std::vector<DetId> ecalDetIds_;
@@ -319,6 +331,19 @@ EventDump::EventDump(const edm::ParameterSet& ps) :
 	}
 
         fd_dump_ = fopen(outDumpFile_.c_str(), "w");
+
+        icToken_       = esConsumes<EcalIntercalibConstants, EcalIntercalibConstantsRcd>();
+        icMCToken_     = esConsumes<EcalIntercalibConstantsMC, EcalIntercalibConstantsMCRcd>();
+        tcToken_       = esConsumes<EcalTimeCalibConstants, EcalTimeCalibConstantsRcd>();
+        adctogevToken_ = esConsumes<EcalADCToGeVConstant, EcalADCToGeVConstantRcd>();
+        apdpnToken_    = esConsumes<EcalLaserAPDPNRatios, EcalLaserAPDPNRatiosRcd>();
+        apdpnrefToken_ = esConsumes<EcalLaserAPDPNRatiosRef, EcalLaserAPDPNRatiosRefRcd>();
+        alphaToken_    = esConsumes<EcalLaserAlphas, EcalLaserAlphasRcd>();
+        laserToken_    = esConsumes<EcalLaserDbService, EcalLaserDbRecord>();
+        chStatusToken_ = esConsumes<EcalChannelStatus, EcalChannelStatusRcd>();
+        pedToken_      = esConsumes<EcalPedestals, EcalPedestalsRcd>();
+        grToken_       = esConsumes<EcalGainRatios, EcalGainRatiosRcd>();
+        geometryToken_ = esConsumes<CaloGeometry, CaloGeometryRecord>();
 
 	// initialise ECAL DetId vector
 	for (int hi = EBDetId::MIN_HASH; hi <= EBDetId::MAX_HASH; ++hi ) {
@@ -571,26 +596,27 @@ EventDump::analyze(const edm::Event& ev, const edm::EventSetup& es)
         //es.get<EcalTimeCalibConstantsRcd>().get( tc_ );
         //es.get<CaloGeometryRecord>().get(caloGeometry_);
         //geo_ = caloGeometry_.product();
-        edm::ESHandle< EcalElectronicsMapping > ecalmapping;
-        es.get<EcalMappingRcd>().get(ecalmapping);
+        // uncomment below if needed
+        // edm::ESHandle< EcalElectronicsMapping > ecalmapping;
+        // es.get<EcalMappingRcd>().get(ecalmapping);
 
         edm::ESHandle<CaloGeometry> pGeometry;
-        es.get<CaloGeometryRecord>().get(pGeometry);
-        geometry = pGeometry.product();
+        geometry_ = es.getHandle(geometryToken_);
+        geometry = geometry_.product();
 
         // get conditions
-        es.get<EcalIntercalibConstantsRcd>().get(ic_);
-        es.get<EcalIntercalibConstantsRcd>().get(icMC_);
-        es.get<EcalChannelStatusRcd>().get(chStatus_);
-        es.get<EcalPedestalsRcd>().get(ped_);
-        es.get<EcalGainRatiosRcd>().get(gr_);
-        es.get<EcalLaserAPDPNRatiosRcd>().get(apdpn_);
-        es.get<EcalLaserAPDPNRatiosRefRcd>().get(apdpnref_);
-        es.get<EcalLaserAlphasRcd>().get(alpha_);
-        es.get<EcalLaserDbRecord>().get(laser_);
-        es.get<EcalPedestalsRcd>().get(ped_);
-        es.get<EcalGainRatiosRcd>().get(gr_);
-        es.get<EcalADCToGeVConstantRcd>().get(adctogev_);
+        es.getHandle(icToken_);
+        es.getHandle(icMCToken_);
+        es.getHandle(chStatusToken_);
+        es.getHandle(pedToken_);
+        es.getHandle(grToken_);
+        es.getHandle(apdpnToken_);
+        es.getHandle(apdpnrefToken_);
+        es.getHandle(alphaToken_);
+        es.getHandle(laserToken_);
+        es.getHandle(pedToken_);
+        es.getHandle(grToken_);
+        es.getHandle(adctogevToken_);
 
         if (dumpEvent_)   dumpEvent(ev, es);
         if (dumpDigis_)   dumpDigis(ev, es);
