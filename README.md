@@ -54,9 +54,9 @@
                        coherent txt file (N.B. does not need the CMSSW environment to work)
 
 #### Dumper setup
-Setup a working area for example in `CMSSW_12_3_5`. Any release `>=12_3_5`
+Setup a working area for example in `CMSSW_14_0_0_pre0`. Any release `>=14_0_0`
 should work just fine, contact me in case not. For older releases please refer
-to the branches `cmssw_12x`, `cmssw_12x_prior_12_3_5`, `cmssw_11x`,
+to the branches `cmssw_13x`, `cmssw_12x`, `cmssw_12x_prior_12_3_5`, `cmssw_11x`,
 `cmssw_10x`, `cmssw_9x`, `cmssw_8x`, and `cmssw_7x`, for `CMSSW_11X`,
 `CMSSW_10X`, `CMSSW_9X`, `CMSSW_8X`, and `CMSSW_7X` respectively.
 The branch `cmssw_12x_prior_12_3_5` has the old BS methods to retrieve `z()`,
