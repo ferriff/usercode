@@ -298,12 +298,12 @@ void EcalLaserPlotter::compute_averages(const EcalLaserAPDPNRatios & apdpn, time
 		
 		
 		
-                if (isinf(p2) > 0) {
+                if (std::isinf(p2) > 0) {
 		        p2 =  FLT_MAX;
-                } else if (isinf(p2) < 0) {
+                } else if (std::isinf(p2) < 0) {
                         p2 = -FLT_MAX;
                 }
-                if (isnan(p2)) {
+                if (std::isnan(p2)) {
                         p2 =  FLT_MAX;
                 }
 
@@ -328,11 +328,11 @@ void EcalLaserPlotter::compute_averages(const EcalLaserAPDPNRatios & apdpn, time
 		  hm_.h<TH2D>("map"
 		*/
 		float slope3, slope1;
-		if(!isinf((p2-p1)/(t2-t1))&&!isnan((p2-p1)/(t2-t1)))
+		if(!std::isinf((p2-p1)/(t2-t1))&&!std::isnan((p2-p1)/(t2-t1)))
                   slope1 = 3600*(p2-p1)/(t2-t1);
                 else
                   slope1=-100.;
-                if(!isinf((p3-p2)/(t3-t2))&&!isnan((p3-p2)/(t3-t2)))
+                if(!std::isinf((p3-p2)/(t3-t2))&&!std::isnan((p3-p2)/(t3-t2)))
                   slope3 = 3600*(p3-p2)/(t3-t2);
                 else
                   slope3=-100.;
@@ -433,7 +433,7 @@ void EcalLaserPlotter::fill_slope_histories(time_t t)
 	xm1=0;
       for(size_t j = 0; j < sizeof(fracs)/sizeof(float); ++j)
 	{
-	  if(!isnan(xm3)&&!isinf(xm3))
+	  if(!std::isnan(xm3)&&!std::isinf(xm3))
 	    {
 	      sprintf(str, "p3_p2_%s_%s", qname_[i],nfrac[j]);
 	      TGraphAsymmErrors * g3 = hm_.h<TGraphAsymmErrors>("history", str);
@@ -445,7 +445,7 @@ void EcalLaserPlotter::fill_slope_histories(time_t t)
 		  ++nSlope3_[i];
 		}
 	    }
-	  if(!isnan(xm1)&&!isinf(xm1)&&xm3!=0)
+	  if(!std::isnan(xm1)&&!std::isinf(xm1)&&xm3!=0)
 	    {
 	      sprintf(str, "p2_p1_%s_%s", qname_[i],nfrac[j]);
 	      TGraphAsymmErrors * g1 = hm_.h<TGraphAsymmErrors>("history", str);
@@ -555,11 +555,11 @@ void EcalLaserPlotter::fill(const EcalLaserAPDPNRatios & apdpn, time_t t)
 		p3 = (*itAPDPN).p3;
 		
 		double slope3, slope1;
-		if(!isinf((p2-p1)/(t2-t1))&&!isnan((p2-p1)/(t2-t1)))
+		if(!std::isinf((p2-p1)/(t2-t1))&&!std::isnan((p2-p1)/(t2-t1)))
                   slope1 = 3600*(p2-p1)/(t2-t1);
                 else
                   slope1=-100.;
-                if(!isinf((p3-p2)/(t3-t2))&&!isnan((p3-p2)/(t3-t2)))
+                if(!std::isinf((p3-p2)/(t3-t2))&&!std::isnan((p3-p2)/(t3-t2)))
                   slope3 =3600*(p3-p2)/(t3-t2);
                 else
                   slope3=-100.;
@@ -590,20 +590,20 @@ void EcalLaserPlotter::fill(const EcalLaserAPDPNRatios & apdpn, time_t t)
 
 		const char * temhl[] = { "EEh2", "EBh2"};
 		
-                if (isinf(p2) > 0) {
+                if (std::isinf(p2) > 0) {
                         p2 =  FLT_MAX;
                         sprintf(str, "%sinfp", subdet[iz+1]);
                         hm_.h<TH2D>(temhl[isEB], str, &h2d_infp[iz + 1])->Fill(ix, iy);
                         inf_.insert((int)id);
                         continue;
-                } else if (isinf(p2) < 0) {
+                } else if (std::isinf(p2) < 0) {
                         p2 = -FLT_MAX;
                         sprintf(str, "%sinfm", subdet[iz+1]);
                         hm_.h<TH2D>(temhl[isEB], str, &h2d_infm[iz + 1])->Fill(ix, iy);
                         inf_.insert(-(int)id);
                         continue;
                 }
-                if (isnan(p2)) {
+                if (std::isnan(p2)) {
                         p2 =  FLT_MAX;
                         sprintf(str, "%snan", subdet[iz+1]);
                         hm_.h<TH2D>(temhl[isEB], str, &h2d_nan[iz + 1])->Fill(ix, iy);

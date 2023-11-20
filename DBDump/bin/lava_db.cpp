@@ -81,7 +81,7 @@ int cond::LaserValidation::execute()
         //since = std::max((cond::Time_t)2, cond::timeTypeSpecs[iov.timetype()].beginValue); // avoid first IOV
         //till  = std::min(till,  cond::timeTypeSpecs[iov.timetype()].endValue);
 
-        std::cout << "tag " << tag << " , total of " << std::distance(iov.begin(), iov.end()) << "iov(s)\n";
+        std::cout << "tag " << tag << " , total of " << iov.size() << "iov(s)\n";
         std::cout << "since: " << since << "   till: " << till << "\n";
 
         int niov = -1;

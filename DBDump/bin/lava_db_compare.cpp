@@ -163,8 +163,8 @@ int cond::LaserValidation::execute()
                 assert(fdump);
         }
 
-        std::cout << "tag1 " << tag1 << " , total of " << std::distance(iov1.begin(), iov1.end()) << "iov(s)\n";
-        std::cout << "tag2 " << tag2 << " , total of " << std::distance(iov2.begin(), iov2.end()) << "iov(s)\n";
+        std::cout << "tag1 " << tag1 << " , total of " << iov1.size() << "iov(s)\n";
+        std::cout << "tag2 " << tag2 << " , total of " << iov2.size() << "iov(s)\n";
         std::cout << "since: " << since << "   till: " << till << "\n";
 
         int niov = -1;
