@@ -1,5 +1,6 @@
 #include "usercode/DBDump/interface/CondDBDumper.h"
 
+#include "CondFormats/Alignment/interface/Alignments.h"
 #include "CondFormats/BeamSpotObjects/interface/BeamSpotObjects.h"
 #include "CondFormats/EcalObjects/interface/EcalADCToGeVConstant.h"
 #include "CondFormats/EcalObjects/interface/EcalChannelStatus.h"
@@ -251,6 +252,13 @@ int main(int argc, char** argv)
         supported.push_back("ESIntercalibConstants");
         if (!help && obj == "ESIntercalibConstants") {
                 cond::CondDBDumper<ESIntercalibConstants> d(obj);
+                d.run(argc, argv);
+                return 0;
+        }
+
+        supported.push_back("Alignments");
+        if (!help && obj == "Alignments") {
+                cond::CondDBDumper<Alignments> d(obj);
                 d.run(argc, argv);
                 return 0;
         }

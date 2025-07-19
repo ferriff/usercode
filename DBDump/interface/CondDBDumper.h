@@ -10,6 +10,7 @@
 #include <iterator>
 #include <iostream>
 
+#include "CondFormats/Alignment/interface/Alignments.h"
 #include "CondFormats/BeamSpotObjects/interface/BeamSpotObjects.h"
 #include "CondFormats/EcalObjects/interface/EcalADCToGeVConstant.h"
 #include "CondFormats/EcalObjects/interface/EcalChannelStatus.h"
@@ -76,7 +77,7 @@ namespace cond {
                                                 _ids[hi] = ebId;
                                         }
                                 }
-                                for ( int hi = 0; hi < EEDetId::kSizeForDenseIndexing; ++hi ) {
+                                for (int hi = 0; hi < EEDetId::kSizeForDenseIndexing; ++hi) {
                                         EEDetId eeId = EEDetId::unhashIndex(hi);
                                         if (eeId != EEDetId()) {
                                                 int idx = EBDetId::MAX_HASH + 1 + hi;
@@ -527,6 +528,19 @@ namespace cond {
                                         ESIntercalibConstants::const_iterator it = ic.find(id);
                                         assert(it != ic.end());
                                         fprintf(fd, "%d %f\n", id.rawId(), *it);
+                                }
+                        }
+
+                        void dump(FILE * fd, Alignments & o)
+                        {
+                                size_t cnt = 0;
+                                for (const auto & it : o.m_align) {
+                                        // translation
+                                        const auto & t = it.translation();
+                                        fprintf(fd, "cnt= %lu x= %f y= %f z= %f", cnt, t.x(), t.y(), t.z());
+                                        const auto & r = it.rotation();
+                                        fprintf(fd, " phiX= %f phiY= %f phiZ= %f thetaX= %f theta= %f thetaZ= %f\n", r.phiX(), r.phiY(), r.phiZ(), r.thetaX(), r.thetaY(), r.thetaZ());
+                                        ++cnt;
                                 }
                         }
 

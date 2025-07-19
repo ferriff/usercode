@@ -10,6 +10,7 @@
 
 #### Dumper list
    * `conddb_dumper.cpp`: self-explicative via the `-h/--help` options. Currently supported objects: 
+     * Alignments
      * BeamSpotObjects
      * ESEEIntercalibConstants
      * ESGain
@@ -66,8 +67,8 @@ that gives the corresponding compilation errors. Starting from not later than
 `12_3_5`, the new methods are used.
 Please note that not all the objects supported in the latest release are backported.
 ```bash
-cmsrel CMSSW_14_0_0_pre0
-cd CMSSW_14_0_0_pre0/src
+cmsrel CMSSW_15_0_10
+cd CMSSW_15_0_10/src
 cmsenv
 git cms-init
 git clone git@github.com:ferriff/usercode.git
