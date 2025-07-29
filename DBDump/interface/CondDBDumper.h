@@ -539,7 +539,10 @@ namespace cond {
                                         const auto & t = it.translation();
                                         fprintf(fd, "cnt= %lu x= %f y= %f z= %f", cnt, t.x(), t.y(), t.z());
                                         const auto & r = it.rotation();
-                                        fprintf(fd, " phiX= %f phiY= %f phiZ= %f thetaX= %f theta= %f thetaZ= %f\n", r.phiX(), r.phiY(), r.phiZ(), r.thetaX(), r.thetaY(), r.thetaZ());
+                                        // rotations around axes
+                                        // fprintf(fd, " phiX= %f phiY= %f phiZ= %f thetaX= %f theta= %f thetaZ= %f\n", r.phiX(), r.phiY(), r.phiZ(), r.thetaX(), r.thetaY(), r.thetaZ());
+                                        // Euler angles
+                                        fprintf(fd, " theta= %f phi= %f psi= %f\n", r.theta(), r.phi(), r.psi());
                                         ++cnt;
                                 }
                         }
