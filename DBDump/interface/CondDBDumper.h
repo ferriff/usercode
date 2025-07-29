@@ -421,18 +421,6 @@ namespace cond {
                                 }
                         }
 
-                        void dump(FILE * fd, EcalLaserAPDPNRatios & o)
-                        {
-                            for (size_t i = 0; i < _ids.size(); ++i) {
-                                DetId id(_ids[i]);
-                                auto it = o.getLaserMap().find(id);
-                                coord(_ids[i]);                                
-                                fprintf(fd, "%d %d %d %f %f %f %d\n", _c.ix_, _c.iy_, _c.iz_, 
-                                        (*it).p1, (*it).p2, (*it).p3,
-                                        id.rawId());                                
-                            }
-                        }
-
                         void dump(FILE * fd, EcalSimPulseShape & o)
                         {
                                 fprintf(fd, "# TI=%f EB_THR=%f  EE_THR=%f APD_THR=%f\n", o.time_interval, o.barrel_thresh, o.endcap_thresh, o.apd_thresh);
