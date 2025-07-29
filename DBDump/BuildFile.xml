@@ -4,6 +4,7 @@
 <use   name="Geometry/CaloGeometry"/>
 <use   name="Geometry/EcalMapping"/>
 <use   name="PhysicsTools/UtilAlgos"/>
+<use   name="CondFormats/Alignment"/>
 <use   name="CondFormats/EcalObjects"/>
 <use   name="CondFormats/DataRecord"/>
 <use   name="CalibCalorimetry/EcalLaserCorrection"/>
